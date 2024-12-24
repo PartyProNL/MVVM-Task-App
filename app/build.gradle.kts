@@ -6,12 +6,12 @@ plugins {
 
 android {
     namespace = "me.partypronl.mvvmtaskapp"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "me.partypronl.mvvmtaskapp"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
