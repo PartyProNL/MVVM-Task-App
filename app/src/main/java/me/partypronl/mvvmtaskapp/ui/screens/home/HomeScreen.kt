@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,9 +14,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
@@ -35,6 +38,7 @@ import me.partypronl.mvvmtaskapp.viewmodel.home.HomeViewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import me.partypronl.mvvmtaskapp.data.model.Project
@@ -75,19 +79,47 @@ fun ProjectsList(modifier: Modifier, projects: List<Project>, navController: Nav
 
 @Composable
 fun ProjectCard(modifier: Modifier, project: Project, navController: NavController) {
-    Box(
+    val completedTasks = project.tasks.filter { it.completed }.size
+
+    Column(
         modifier = modifier
+            .clip(MaterialTheme.shapes.large)
             .clickable(onClick = {
                 // TODO: Open project page
             })
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.primaryContainer, MaterialTheme.shapes.large)
-            .padding(horizontal = 12.dp, vertical = 8.dp)
+            .padding(horizontal = 16.dp, vertical = 16.dp)
     ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = project.name,
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                style = MaterialTheme.typography.titleLarge
+            )
+
+            IconButton(onClick = {
+
+            }) {
+                Icon(Icons.Default.MoreVert, "Options")
+            }
+        }
+
         Text(
-            text = project.name,
+            text = "$completedTasks/${project.tasks.size} tasks completed",
+            style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.onPrimaryContainer,
-            style = MaterialTheme.typography.headlineMedium
+            modifier = Modifier.padding(top = 24.dp, bottom = 4.dp)
+        )
+
+        LinearProgressIndicator(
+            progress = { completedTasks / project.tasks.size.toFloat() },
+            modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(4.dp)),
+            trackColor = MaterialTheme.colorScheme.surfaceContainerLowest,
+            color = MaterialTheme.colorScheme.onPrimaryContainer
         )
     }
 }
