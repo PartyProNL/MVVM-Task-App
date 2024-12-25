@@ -1,5 +1,6 @@
 package me.partypronl.mvvmtaskapp.data.repository
 
+import kotlinx.coroutines.delay
 import me.partypronl.mvvmtaskapp.data.model.Project
 import me.partypronl.mvvmtaskapp.data.model.Task
 import javax.inject.Inject
@@ -18,7 +19,8 @@ class ProjectRepository @Inject constructor() {
         ))
     )
 
-    fun getProjects(): List<Project> {
+    suspend fun getProjects(): List<Project> {
+        delay(1000L)
         return projects.toList()
     }
 }

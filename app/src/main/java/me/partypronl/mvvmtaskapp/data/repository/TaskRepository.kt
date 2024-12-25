@@ -1,5 +1,6 @@
 package me.partypronl.mvvmtaskapp.data.repository
 
+import kotlinx.coroutines.delay
 import me.partypronl.mvvmtaskapp.data.model.Task
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -11,7 +12,8 @@ class TaskRepository @Inject constructor() {
         Task("Task 2", false),
     )
 
-    fun getTasks(): List<Task> {
+    suspend fun getTasks(): List<Task> {
+        delay(1000L)
         return tasks.toList()
     }
 }

@@ -1,25 +1,35 @@
 package me.partypronl.mvvmtaskapp.viewmodel.home
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import me.partypronl.mvvmtaskapp.data.model.Task
-import me.partypronl.mvvmtaskapp.data.service.TaskService
+import kotlinx.coroutines.launch
+import me.partypronl.mvvmtaskapp.data.model.Project
+import me.partypronl.mvvmtaskapp.data.service.ProjectService
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    val taskService: TaskService
+    val projectService: ProjectService
 ): ViewModel() {
-    private val _tasks = MutableStateFlow<List<Task>>(emptyList())
-    val tasks = _tasks.asStateFlow()
+    private val _projects = MutableStateFlow<List<Project>>(emptyList())
+    val projects = _projects.asStateFlow()
+
+    private val _loadingProjects = MutableStateFlow(false)
+    val loadingProjects = _loadingProjects.asStateFlow()
 
     init {
-        loadTasks()
+        loadProjects()
     }
 
-    private fun loadTasks() {
-        _tasks.value = taskService.getTasks()
+    private fun loadProjects() {
+        viewModelScope.launch(Dispatchers.IO) {
+            _loadingProjects.value = true
+            _projects.value = projectService.getProjects()
+            _loadingProjects.value = false
+        }
     }
 }

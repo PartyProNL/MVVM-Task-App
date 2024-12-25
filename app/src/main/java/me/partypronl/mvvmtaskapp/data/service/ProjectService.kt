@@ -7,7 +7,7 @@ import javax.inject.Singleton
 
 @Singleton
 class ProjectService @Inject constructor(val projectRepository: ProjectRepository) {
-    fun getProjects(): List<Project> {
+    suspend fun getProjects(): List<Project> {
         return projectRepository.getProjects()
     }
 }

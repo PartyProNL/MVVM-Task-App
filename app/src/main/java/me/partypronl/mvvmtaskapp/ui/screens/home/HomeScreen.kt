@@ -18,33 +18,37 @@ import androidx.navigation.NavController
 import me.partypronl.mvvmtaskapp.viewmodel.home.HomeViewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 
 @Composable
 fun HomeScreen(
     navController: NavController,
     homeViewModel: HomeViewModel = hiltViewModel()
 ) {
-    val tasks by homeViewModel.tasks.collectAsState()
+    val loadingProjects by homeViewModel.loadingProjects.collectAsState()
+    val projects by homeViewModel.projects.collectAsState()
 
     Scaffold(
-        floatingActionButton = { CreateTaskFAB(navController) }
+        floatingActionButton = { CreateProjectFAB(navController) }
     ) { innerPadding ->
-        LazyColumn(modifier = Modifier.padding(innerPadding)) {
-            items(tasks) { task ->
-                Text(task.text)
+        if(!loadingProjects) {
+            LazyColumn(modifier = Modifier.padding(innerPadding)) {
+                items(projects) { project ->
+                    Text(project.name)
+                }
             }
+        } else {
+            Text("Loading...")
         }
     }
 }
 
 @Composable
-fun CreateTaskFAB(
+fun CreateProjectFAB(
     navController: NavController
 ) {
     ExtendedFloatingActionButton(
         onClick = {},
-        icon = { Icon(Icons.Default.Add, "Add") },
-        text = { Text("Add task") }
+        icon = { Icon(Icons.Default.Add, "Create") },
+        text = { Text("Create project") }
     )
 }

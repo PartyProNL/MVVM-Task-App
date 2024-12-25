@@ -7,7 +7,7 @@ import javax.inject.Singleton
 
 @Singleton
 class TaskService @Inject constructor(val taskRepository: TaskRepository) {
-    fun getTasks(): List<Task> {
+    suspend fun getTasks(): List<Task> {
         return taskRepository.getTasks()
     }
 }
