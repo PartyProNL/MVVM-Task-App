@@ -3,6 +3,7 @@ package me.partypronl.mvvmtaskapp.data.repository
 import kotlinx.coroutines.delay
 import me.partypronl.mvvmtaskapp.data.model.Project
 import me.partypronl.mvvmtaskapp.data.model.Task
+import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -22,5 +23,10 @@ class ProjectRepository @Inject constructor() {
     suspend fun getProjects(): List<Project> {
         delay(1000L)
         return projects.toList()
+    }
+
+    suspend fun findProjectByUUID(uuid: UUID): Project? {
+        delay(1000L)
+        return projects.find { it.uuid == uuid }
     }
 }
