@@ -23,7 +23,7 @@ import androidx.navigation.NavController
 import me.partypronl.mvvmtaskapp.data.model.Project
 
 @Composable
-fun ProjectCard(modifier: Modifier, project: Project, navController: NavController, clickable: Boolean = true) {
+fun ProjectCard(modifier: Modifier = Modifier, project: Project, navController: NavController, clickable: Boolean = true) {
     val completedTasks = project.tasks.filter { it.completed }.size
 
     Column(
