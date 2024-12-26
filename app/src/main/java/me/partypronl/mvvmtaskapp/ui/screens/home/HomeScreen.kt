@@ -78,53 +78,6 @@ fun ProjectsList(modifier: Modifier, projects: List<Project>, navController: Nav
 }
 
 @Composable
-fun ProjectCard(modifier: Modifier, project: Project, navController: NavController) {
-    val completedTasks = project.tasks.filter { it.completed }.size
-
-    Column(
-        modifier = modifier
-            .clip(MaterialTheme.shapes.large)
-            .clickable(onClick = {
-                // TODO: Open project page
-            })
-            .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.primaryContainer, MaterialTheme.shapes.large)
-            .padding(horizontal = 16.dp, vertical = 16.dp)
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(
-                text = project.name,
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                style = MaterialTheme.typography.titleLarge
-            )
-
-            IconButton(onClick = {
-
-            }) {
-                Icon(Icons.Default.MoreVert, "Options")
-            }
-        }
-
-        Text(
-            text = "$completedTasks/${project.tasks.size} tasks completed",
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.onPrimaryContainer,
-            modifier = Modifier.padding(top = 24.dp, bottom = 4.dp)
-        )
-
-        LinearProgressIndicator(
-            progress = { completedTasks / project.tasks.size.toFloat() },
-            modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(4.dp)),
-            trackColor = MaterialTheme.colorScheme.surfaceContainerLowest,
-            color = MaterialTheme.colorScheme.onPrimaryContainer
-        )
-    }
-}
-
-@Composable
 fun LoadingProjects(modifier: Modifier) {
     LinearProgressIndicator(modifier.fillMaxWidth())
 }

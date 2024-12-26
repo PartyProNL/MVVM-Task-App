@@ -2,4 +2,5 @@ package me.partypronl.mvvmtaskapp.ui.routing
 
 sealed class Screen(val route: String) {
     object Home: Screen("home")
+    object Project: Screen("project/{uuid}")
 }
