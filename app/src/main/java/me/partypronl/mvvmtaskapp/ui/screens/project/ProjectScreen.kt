@@ -1,17 +1,29 @@
 package me.partypronl.mvvmtaskapp.ui.screens.project
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.Button
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -132,7 +144,55 @@ fun ProjectScreenContent(modifier: Modifier, navController: NavController, proje
         if(project.tasks.isEmpty()) {
             NoTasks(Modifier, navController)
         } else {
+            val openTasks = project.tasks.filter { !it.completed }
+
+            if(openTasks.isNotEmpty()) {
+                Text(text = "Open", style = MaterialTheme.typography.labelLarge, modifier = Modifier.padding(top = 8.dp, start = 8.dp))
+                LazyColumn {
+                    items(openTasks) { task ->
+                        TaskListItem(task, project)
+                    }
+                }
+            }
+
+            val completedTasks = project.tasks.filter { it.completed }
+
+            if(completedTasks.isNotEmpty()) {
+                Text(text = "Completed", style = MaterialTheme.typography.labelLarge, modifier = Modifier.padding(top = 8.dp, start = 8.dp))
+                LazyColumn {
+                    items(completedTasks) { task ->
+                        TaskListItem(task, project)
+                    }
+                }
+            }
         }
+    }
+}
+
+@Composable
+fun TaskListItem(task: Task, project: Project, projectViewModel: ProjectViewModel = hiltViewModel()) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.fillMaxWidth()
+            .height(56.dp)
+            .toggleable(
+                value = task.completed,
+                onValueChange = { projectViewModel.markTaskAsComplete(task.uuid, it) },
+                role = Role.Checkbox
+            )
+            .padding(horizontal = 16.dp),
+    ) {
+        Checkbox(
+            checked = task.completed,
+            onCheckedChange = null
+        )
+
+        Text(
+            text = task.text,
+            style = MaterialTheme.typography.bodyLarge
+                .copy(textDecoration = if(task.completed) TextDecoration.LineThrough else TextDecoration.None),
+            modifier = Modifier.padding(start = 16.dp)
+        )
     }
 }
 
