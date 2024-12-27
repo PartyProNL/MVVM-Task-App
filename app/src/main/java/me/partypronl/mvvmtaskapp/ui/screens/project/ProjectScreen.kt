@@ -19,11 +19,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import me.partypronl.mvvmtaskapp.R
 import me.partypronl.mvvmtaskapp.data.model.Project
+import me.partypronl.mvvmtaskapp.data.model.Task
 import me.partypronl.mvvmtaskapp.ui.screens.home.ProjectCard
 import me.partypronl.mvvmtaskapp.viewmodel.project.ProjectViewModel
 import java.util.UUID
@@ -57,6 +63,40 @@ fun ProjectScreen(
     }
 }
 
+@Composable
+fun NoTasks(modifier: Modifier = Modifier, navController: NavController) {
+    Column(
+        modifier = modifier.padding(horizontal = 16.dp).fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Icon(
+            modifier = Modifier.size(64.dp),
+            painter = painterResource(R.drawable.baseline_search_off_24),
+            contentDescription = "No results"
+        )
+
+        Spacer(Modifier.height(12.dp))
+        Text("No tasks found", style = MaterialTheme.typography.titleLarge)
+        Text("Add your first with the button below")
+
+        Spacer(Modifier.height(12.dp))
+        AddTaskButton(navController = navController)
+    }
+}
+
+@Composable
+fun AddTaskButton(
+    navController: NavController
+) {
+    Button(
+        onClick = {},
+    ) {
+        Text("Add task")
+    }
+}
+
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProjectScreenTopBar(project: Project?, navController: NavController) {
@@ -88,6 +128,11 @@ fun ProjectScreenContent(modifier: Modifier, navController: NavController, proje
             navController = navController,
             clickable = false
         )
+
+        if(project.tasks.isEmpty()) {
+            NoTasks(Modifier, navController)
+        } else {
+        }
     }
 }
 
