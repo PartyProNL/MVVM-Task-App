@@ -24,13 +24,19 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -198,9 +204,46 @@ fun TaskListItem(task: Task, project: Project, projectViewModel: ProjectViewMode
 
 @Composable
 fun CreateTaskFAB(navController: NavController, project: Project) {
+    var showCreateSheet by remember { mutableStateOf(false) }
+
     ExtendedFloatingActionButton(
-        onClick = {},
+        onClick = { showCreateSheet = true },
         icon = { Icon(Icons.Default.Add, "Add") },
         text = { Text(text = "Add task") }
     )
+
+    CreateTaskBottomSheet(project, showCreateSheet, onDismiss = { showCreateSheet = false })
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CreateTaskBottomSheet(project: Project, open: Boolean, onDismiss: () -> Unit) {
+    val sheetState = rememberModalBottomSheetState()
+
+    if(open) {
+        ModalBottomSheet(
+            onDismissRequest = onDismiss,
+            sheetState = sheetState
+        ) {
+            Column(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                horizontalAlignment = Alignment.End
+            ) {
+                OutlinedTextField(
+                    value = "Test",
+                    onValueChange = {},
+                    modifier = Modifier.fillMaxWidth(),
+                    label = { Text("Task") }
+                )
+
+                Button(onClick = {
+
+                },
+                    modifier = Modifier.padding(vertical = 16.dp)
+                ) {
+                    Text("Create")
+                }
+            }
+        }
+    }
 }
