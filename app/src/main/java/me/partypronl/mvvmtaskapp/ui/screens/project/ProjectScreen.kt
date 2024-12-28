@@ -217,8 +217,10 @@ fun CreateTaskFAB(navController: NavController, project: Project) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CreateTaskBottomSheet(project: Project, open: Boolean, onDismiss: () -> Unit) {
+fun CreateTaskBottomSheet(project: Project, open: Boolean, onDismiss: () -> Unit, projectViewModel: ProjectViewModel = hiltViewModel()) {
     val sheetState = rememberModalBottomSheetState()
+    val newTaskText = projectViewModel.newTaskText.collectAsState()
+    val canCreateNewTask = projectViewModel.canCreateNewTask.collectAsState()
 
     if(open) {
         ModalBottomSheet(
@@ -230,8 +232,8 @@ fun CreateTaskBottomSheet(project: Project, open: Boolean, onDismiss: () -> Unit
                 horizontalAlignment = Alignment.End
             ) {
                 OutlinedTextField(
-                    value = "Test",
-                    onValueChange = {},
+                    value = newTaskText.value,
+                    onValueChange = { projectViewModel.setNewTaskText(it) },
                     modifier = Modifier.fillMaxWidth(),
                     label = { Text("Task") }
                 )
@@ -239,7 +241,8 @@ fun CreateTaskBottomSheet(project: Project, open: Boolean, onDismiss: () -> Unit
                 Button(onClick = {
 
                 },
-                    modifier = Modifier.padding(vertical = 16.dp)
+                    modifier = Modifier.padding(vertical = 16.dp),
+                    enabled = canCreateNewTask.value
                 ) {
                     Text("Create")
                 }

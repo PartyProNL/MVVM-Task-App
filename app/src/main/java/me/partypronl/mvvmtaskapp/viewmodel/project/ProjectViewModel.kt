@@ -23,6 +23,12 @@ class ProjectViewModel @Inject constructor(
     private val _loadingProject = MutableStateFlow(true)
     val loadingProject = _loadingProject.asStateFlow()
 
+    private val _newTaskText = MutableStateFlow("")
+    val newTaskText = _newTaskText.asStateFlow()
+
+    private val _canCreateNewTask = MutableStateFlow(false)
+    val canCreateNewTask = _canCreateNewTask.asStateFlow()
+
     fun loadProject(uuid: UUID) {
         viewModelScope.launch(Dispatchers.IO) {
             _loadingProject.value = true
@@ -43,5 +49,10 @@ class ProjectViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             // save project
         }
+    }
+
+    fun setNewTaskText(text: String) {
+        _newTaskText.value = text
+        _canCreateNewTask.value = text.isNotBlank()
     }
 }
